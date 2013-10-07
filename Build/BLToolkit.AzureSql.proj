@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Default">
+    <PropertyGroup>
+        <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
+        <Package>$(BaseDir)\Package</Package>
+        <Source>$(BaseDir)\Source</Source>
+		<NuGet>$(Source)\.nuget</NuGet>
+    </PropertyGroup>
+
+    <Target Name="Default" DependsOnTargets="Build; Package;" />
+
+    <ItemGroup>
+        <ProjectToBuild Include="$(Source)\BLToolkit.AzureSql.2012.sln">
+            <Properties>Configuration=Release</Properties>
+        </ProjectToBuild>
+    </ItemGroup>
+
+    <Target Name="Build">
+        <MSBuild Projects="@(ProjectToBuild)" Targets="Clean;Rebuild"/>
+    </Target>
+
+    <Target Name="Package" DependsOnTargets="Build">
+        <ItemGroup>
+            <FilesToDelete Include="$(Package)\*.nupkg"  />
+        </ItemGroup>
+		
+        <Delete Files="@(FilesToDelete)" />
+    
+        <Exec WorkingDirectory="$(Package)" Command="$(NuGet)\NuGet.exe pack $(Package)\BLToolkit.AzureSql.nuspec" />
+    </Target>
+</Project>
