@@ -4,15 +4,34 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
+	using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 	using Sql.SqlProvider;
 
-	public class AzureSqlDataProvider : SqlDataProviderBase
+	public sealed class AzureSqlDataProvider : SqlDataProviderBase
 	{
 		private static readonly List<Func<Type, string>> UdtTypeNameResolvers = new List<Func<Type, string>>();
+		private readonly RetryPolicy commandRetryPolicy;
+		private readonly RetryPolicy connectionRetryPolicy;
 
 		static AzureSqlDataProvider()
 		{
 			AddUdtTypeNameResolver(ResolveStandartUdt);
+		}
+
+		public AzureSqlDataProvider()
+			: this(new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(RetryStrategy.DefaultExponential))
+		{
+		}
+
+		public AzureSqlDataProvider(RetryPolicy defaultRetryPolicy)
+			: this(defaultRetryPolicy, defaultRetryPolicy)
+		{
+		}
+
+		public AzureSqlDataProvider(RetryPolicy connectionRetryPolicy, RetryPolicy commandRetryPolicy)
+		{
+			this.connectionRetryPolicy = connectionRetryPolicy;
+			this.commandRetryPolicy = commandRetryPolicy;
 		}
 
 		public override string Name
@@ -22,7 +41,7 @@
 
 		public override IDbConnection CreateConnectionObject()
 		{
-			return new AzureSqlConnection();
+			return new AzureSqlConnection(this.connectionRetryPolicy, this.commandRetryPolicy);
 		}
 
 		public static void AddUdtTypeNameResolver(Func<Type, string> resolver)

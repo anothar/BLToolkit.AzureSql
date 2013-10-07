@@ -4,7 +4,7 @@
 	using System.Data.SqlClient;
 	using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
-	internal class AzureSqlCommand : IDbCommand
+	internal sealed class AzureSqlCommand : IDbCommand
 	{
 		private readonly SqlCommand command;
 
@@ -36,22 +36,31 @@
 
 		public int ExecuteNonQuery()
 		{
-			return this.command.ExecuteNonQueryWithRetry();
+			var reliableConnection = (ReliableSqlConnection) this.Connection;
+			return this.command.ExecuteNonQueryWithRetry(reliableConnection.CommandRetryPolicy,
+			                                             reliableConnection.ConnectionRetryPolicy);
 		}
 
 		public IDataReader ExecuteReader()
 		{
-			return this.command.ExecuteReaderWithRetry();
+			var reliableConnection = (ReliableSqlConnection) this.Connection;
+			return this.command.ExecuteReaderWithRetry(reliableConnection.CommandRetryPolicy,
+			                                           reliableConnection.ConnectionRetryPolicy);
 		}
 
 		public IDataReader ExecuteReader(CommandBehavior behavior)
 		{
-			return this.command.ExecuteReaderWithRetry(behavior);
+			var reliableConnection = (ReliableSqlConnection) this.Connection;
+			return this.command.ExecuteReaderWithRetry(behavior,
+			                                           reliableConnection.CommandRetryPolicy,
+			                                           reliableConnection.ConnectionRetryPolicy);
 		}
 
 		public object ExecuteScalar()
 		{
-			return this.command.ExecuteScalarWithRetry();
+			var reliableConnection = (ReliableSqlConnection) this.Connection;
+			return this.command.ExecuteScalarWithRetry(reliableConnection.CommandRetryPolicy,
+			                                           reliableConnection.ConnectionRetryPolicy);
 		}
 
 		public IDbConnection Connection { get; set; }

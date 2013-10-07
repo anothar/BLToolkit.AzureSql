@@ -1,31 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Default">
-	<PropertyGroup>
-		<BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
-		<Package>$(BaseDir)\Package</Package>
-		<Source>$(BaseDir)\Source</Source>
-		<NuGet>$(Source)\.nuget</NuGet>
-	</PropertyGroup>
+  <PropertyGroup>
+    <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
+    <Package>$(BaseDir)\Package</Package>
+    <Source>$(BaseDir)\Source</Source>
+    <Tools>$(BaseDir)\Tools</Tools>
+    <MSBuildCommunityTasksPath>$(Tools)\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+    <NuGet>$(Source)\.nuget</NuGet>
+  </PropertyGroup>
 
-	<Target Name="Default" DependsOnTargets="Build; Package;" />
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
-	<ItemGroup>
-		<ProjectToBuild Include="$(Source)\BLToolkit.AzureSql.2012.sln">
-			<Properties>Configuration=Release</Properties>
-		</ProjectToBuild>
-	</ItemGroup>
+  <Target Name="Default" DependsOnTargets="Build; Package;" />
 
-	<Target Name="Build">
-		<MSBuild Projects="@(ProjectToBuild)" Targets="Clean;Rebuild"/>
-	</Target>
+  <ItemGroup>
+    <ProjectToBuild Include="$(Source)\BLToolkit.AzureSql.2012.sln">
+      <Properties>Configuration=Release</Properties>
+    </ProjectToBuild>
+  </ItemGroup>
 
-	<Target Name="Package" DependsOnTargets="Build">
-		<ItemGroup>
-			<FilesToDelete Include="$(Package)\*.nupkg"  />
-		</ItemGroup>
+  <Target Name="Build">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Clean;Rebuild"/>
+  </Target>
 
-		<Delete Files="@(FilesToDelete)" />
+  <Target Name="Package" DependsOnTargets="Build">
+    <ItemGroup>
+      <FilesToDelete Include="$(Package)\*.nupkg"  />
+    </ItemGroup>
 
-		<Exec WorkingDirectory="$(Package)" Command="$(NuGet)\NuGet.exe pack $(Package)\BLToolkit.AzureSql.nuspec" />
-	</Target>
+    <Delete Files="@(FilesToDelete)" />
+
+    <GetAssemblyIdentity AssemblyFiles="$(Source)\BLToolkit.Data.DataProvider.AzureSql\bin\Release\BLToolkit.Data.DataProvider.AzureSql.dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+    </GetAssemblyIdentity>
+
+    <XmlUpdate
+        Namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+        Prefix="n"
+        XmlFileName="$(Package)\BLToolkit.AzureSql.nuspec"
+        XPath="/n:package/n:metadata/n:version"
+        Value="%(AssemblyInfo.Version)" />
+
+    <Exec WorkingDirectory="$(Package)" Command="$(NuGet)\NuGet.exe pack $(Package)\BLToolkit.AzureSql.nuspec" />
+  </Target>
+
+  <Target Name="Push" DependsOnTargets="Package">
+    <GetAssemblyIdentity AssemblyFiles="$(Source)\BLToolkit.Data.DataProvider.AzureSql\bin\Release\BLToolkit.Data.DataProvider.AzureSql.dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+    </GetAssemblyIdentity>
+
+    <Exec WorkingDirectory="$(Package)" Command="$(NuGet)\NuGet.exe push $(Package)\BLToolkit.AzureSql.%(AssemblyInfo.Version).nupkg" />
+  </Target>
 </Project>

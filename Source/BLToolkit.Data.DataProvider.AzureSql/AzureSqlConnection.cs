@@ -3,13 +3,13 @@
 	using System.Data;
 	using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
-	internal class AzureSqlConnection : IDbConnection
+	internal sealed class AzureSqlConnection : IDbConnection
 	{
 		private readonly ReliableSqlConnection reliableConnection;
 
-		public AzureSqlConnection()
+		public AzureSqlConnection(RetryPolicy connectionRetryPolicy, RetryPolicy commandRetryPolicy)
 		{
-			this.reliableConnection = new ReliableSqlConnection(null);
+			this.reliableConnection = new ReliableSqlConnection(null, connectionRetryPolicy, commandRetryPolicy);
 		}
 
 		public void Dispose()
