@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Data.SqlClient;
 	using System.Linq;
 	using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 	using Sql.SqlProvider;
@@ -37,6 +38,11 @@
 		public override string Name
 		{
 			get { return AzureSql.ProviderName.AzureSql; }
+		}
+
+		public override bool DeriveParameters(IDbCommand command)
+		{
+			return base.DeriveParameters((SqlCommand) ((AzureSqlCommand) command));
 		}
 
 		public override IDbConnection CreateConnectionObject()

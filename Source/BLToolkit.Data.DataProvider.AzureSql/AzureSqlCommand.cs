@@ -99,5 +99,10 @@
 			get { return this.command.UpdatedRowSource; }
 			set { this.command.UpdatedRowSource = value; }
 		}
+
+		public static explicit operator SqlCommand(AzureSqlCommand command)
+		{
+			return command.command;
+		}
 	}
 }
