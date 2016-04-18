@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>BLToolkit.AzureDataProvider</id>
-    <version>1.2.1.0</version>
+    <version>1.2.2.0</version>
     <title>BLToolkit AzureSql Data Provider</title>
-    <authors>Stepan Kravchenko, Andrey Efimov</authors>
+    <authors>Andrey Efimov, Stepan Kravchenko</authors>
     <licenseUrl>https://github.com/anothar/BLToolkit.AzureSql/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/anothar/BLToolkit.AzureSql</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

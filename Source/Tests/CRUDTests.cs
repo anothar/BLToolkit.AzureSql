@@ -51,5 +51,28 @@ namespace Tests
                 Assert.AreEqual(100, context.GetTable<User>().Count());
             }
         }
+
+        [Test]
+        public void TestBatchInsertTransaction()
+        {
+            using (var context = CreateContext())
+            {
+                using (var ts = context.BeginTransaction())
+                {
+                    var users = new List<User>();
+                    context.GetTable<User>().Delete();
+                    for (var i = 0; i < 100; i++)
+                        users.Add(new User
+                        {
+                            Name = "Test" + i,
+                            Phone = "00" + i
+                        });
+                    context.InsertBatch(users);
+                    Assert.AreEqual(100, context.GetTable<User>().Count());
+                    ts.Rollback();
+                    Assert.AreEqual(0, context.GetTable<User>().Count());
+                }
+            }
+        }
     }
 }
