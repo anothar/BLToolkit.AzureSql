@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>BLToolkit.AzureSql</id>
-    <version>1.2.0.0</version>
+    <id>BLToolkit.AzureDataProvider</id>
+    <version>1.2.1.0</version>
     <title>BLToolkit AzureSql Data Provider</title>
-    <authors>Stepan Kravchenko</authors>
-    <licenseUrl>https://github.com/krabishe/BLToolkit.AzureSql/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/krabishe/BLToolkit.AzureSql</projectUrl>
+    <authors>Stepan Kravchenko, Andrey Efimov</authors>
+    <licenseUrl>https://github.com/anothar/BLToolkit.AzureSql/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/anothar/BLToolkit.AzureSql</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Business Logic Toolkit AzureSql Data Provider for .NET</description>
     <tags>Azure SQL bltoolkit Linq ORM DAL database DB</tags>
     <dependencies>
-      <dependency id="BLToolkit" version="4.1.21" />
+      <dependency id="BLToolkit" version="4.3.4" />
       <dependency id="EnterpriseLibrary.TransientFaultHandling.Data" version="6.0.1304.1" />
     </dependencies>
   </metadata>
