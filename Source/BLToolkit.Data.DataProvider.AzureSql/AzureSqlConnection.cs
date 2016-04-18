@@ -67,5 +67,10 @@
 		{
 			get { return this.reliableConnection.State; }
 		}
+
+        internal ReliableSqlConnection InnerConnection
+        {
+            get { return reliableConnection; }
+        }
 	}
 }

@@ -1,14 +1,15 @@
 ﻿namespace BLToolkit.Data.DataProvider.AzureSql
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Data.SqlClient;
-	using System.Linq;
-	using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-	using Sql.SqlProvider;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using Mapping;
+    using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+    using Sql.SqlProvider;
 
-	public sealed class AzureSqlDataProvider : SqlDataProviderBase
+    public sealed class AzureSqlDataProvider : SqlDataProviderBase
 	{
 		private static readonly List<Func<Type, string>> UdtTypeNameResolvers = new List<Func<Type, string>>();
 		private readonly RetryPolicy commandRetryPolicy;
@@ -82,5 +83,15 @@
 					UdtTypeNameResolvers.Select(_ => _(valueType)).FirstOrDefault(_ => !string.IsNullOrEmpty(_));
 			}
 		}
-	}
+
+        public override int InsertBatch<T>(DbManager db, string insertText, IEnumerable<T> collection, MemberMapper[] members, int maxBatchSize, DbManager.ParameterProvider<T> getParameters)
+        {
+            var connection = db.Connection;
+            //we have to take inner SqlConnection or else get error
+            if (connection is AzureSqlConnection)
+                connection = ((AzureSqlConnection)connection).InnerConnection.Current;
+            var copyManager = new DbManager(connection);
+            return base.InsertBatch<T>(copyManager, insertText, collection, members, maxBatchSize, getParameters);
+        }
+    }
 }

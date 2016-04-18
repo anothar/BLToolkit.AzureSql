@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLToolkit.Data.DataProvider.AzureSql", "BLToolkit.Data.DataProvider.AzureSql\BLToolkit.Data.DataProvider.AzureSql.csproj", "{68742039-FB2A-46D8-BBF7-E51FE9F6B728}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B5A7EC48-6D54-4EFE-960F-90DA66EFE38A}"
@@ -9,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B5A7EC
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{9DE3F0B2-FD3D-49C3-8D07-E06BD9628813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +24,10 @@ Global
 		{68742039-FB2A-46D8-BBF7-E51FE9F6B728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68742039-FB2A-46D8-BBF7-E51FE9F6B728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68742039-FB2A-46D8-BBF7-E51FE9F6B728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DE3F0B2-FD3D-49C3-8D07-E06BD9628813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DE3F0B2-FD3D-49C3-8D07-E06BD9628813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DE3F0B2-FD3D-49C3-8D07-E06BD9628813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DE3F0B2-FD3D-49C3-8D07-E06BD9628813}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
