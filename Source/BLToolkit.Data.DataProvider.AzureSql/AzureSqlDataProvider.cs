@@ -90,14 +90,7 @@
             //we have to take inner SqlConnection or else get error
             if (connection is AzureSqlConnection)
                 connection = ((AzureSqlConnection)connection).InnerConnection.Current;
-            DbManager copyManager;
-            if (db.Transaction != null)
-            {
-                copyManager = new DbManager(db.Transaction);
-                copyManager.Connection = connection;
-            }
-            else
-                copyManager = new DbManager(connection);
+            var copyManager = db.Transaction != null ? new DbManager(db.Transaction) {Connection = connection} : new DbManager(connection);
             return base.InsertBatch<T>(copyManager, insertText, collection, members, maxBatchSize, getParameters);
         }
     }
